@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workout Timer | FitTrack</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .timer-container {
+      margin-top: 30px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .timer-box {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 25px 35px;
+      border-radius: 16px;
+      box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
+      width: 100%;
+      max-width: 500px;
+      text-align: center;
+    }
+
+    .timer-title {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+      color: #ff7043;
+    }
+
+    .time-display {
+      font-size: 3rem;
+      margin: 15px 0;
+      letter-spacing: 2px;
+      color: #fff;
+    }
+
+    .timer-controls button {
+      background: var(--accent-color, #ff4500);
+      color: #fff;
+      border: none;
+      padding: 10px 18px;
+      border-radius: 10px;
+      margin: 0 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: 0.3s;
+    }
+
+    .timer-controls button:hover {
+      opacity: 0.8;
+    }
+
+    .input-time {
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      margin-bottom: 10px;
+      text-align: center;
+      font-size: 1rem;
+    }
+
+    .status-text {
+      font-size: 1rem;
+      opacity: 0.7;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h1 class="app-logo">FitTrack</h1>
+        <button class="menu-toggle" id="menuToggle">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+       <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="workouts.html" class="nav-link">Workouts</a></li>
+                <li><a href="nutrition.html" class="nav-link">Nutrition</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="goal.html" class="nav-link ">Goals</a></li>
+                             
+                <li><a href="recommendations.html" class="nav-link ">AI Recommendations</a></li>
+ 
+                <li><a href="planner.html" class="nav-link ">Smart Daily Planner</a></li>
+               
+        <li><a href="timer.html" class="nav-link active">Timer / Stopwatch</a></li>
+               
+                <li><a href="reminders.html" class="nav-link ">Reminders</a></li>
+        <li><a href="settings.html" class="nav-link">Settings</a></li>
+            </ul>
+      <div class="sidebar-footer">
+        <button class="theme-toggle" id="themeToggle"></button>
+      </div>
+    </nav>
+
+    <!-- Main -->
+    <main class="main-content">
+      <header class="header">
+        <div class="header-content">
+          <h2>Workout Timer & Stopwatch</h2>
+          <p id="currentDate" class="date-display"></p>
+        </div>
+      </header>
+
+      <div class="dashboard-content">
+       
+        <div class="timer-container">
+          <!-- Stopwatch -->
+          <div class="timer-box" id="stopwatchBox">
+            <h3 class="timer-title">⏱ Stopwatch</h3>
+            <div id="stopwatchDisplay" class="time-display">00:00:00</div>
+            <div class="timer-controls">
+              <button id="startStopwatch">Start</button>
+              <button id="pauseStopwatch">Pause</button>
+              <button id="resetStopwatch">Reset</button>
+            </div>
+            <p id="stopwatchStatus" class="status-text">Ready to start</p>
+          </div>
+
+          <!-- Countdown Timer -->
+          <div class="timer-box" id="countdownBox">
+            <h3 class="timer-title">⏳ Countdown Timer</h3>
+            <input type="number" id="countdownInput" class="input-time" placeholder="Enter seconds" />
+            <div id="countdownDisplay" class="time-display">00:00</div>
+            <div class="timer-controls">
+              <button id="startCountdown">Start</button>
+              <button id="pauseCountdown">Pause</button>
+              <button id="resetCountdown">Reset</button>
+            </div>
+            <p id="countdownStatus" class="status-text">Set your time and begin</p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById("currentDate").textContent = new Date().toDateString();
+
+    // -------------------------
+    // ⏱ STOPWATCH
+    // -------------------------
+    let stopwatchInterval;
+    let stopwatchTime = JSON.parse(localStorage.getItem("fittrack_stopwatch")) || 0;
+    let stopwatchRunning = false;
+
+    const stopwatchDisplay = document.getElementById("stopwatchDisplay");
+    const stopwatchStatus = document.getElementById("stopwatchStatus");
+
+    function updateStopwatchDisplay() {
+      const hrs = Math.floor(stopwatchTime / 3600);
+      const mins = Math.floor((stopwatchTime % 3600) / 60);
+      const secs = stopwatchTime % 60;
+      stopwatchDisplay.textContent = 
+        `${hrs.toString().padStart(2, "0")}:${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    }
+
+    function startStopwatch() {
+      if (stopwatchRunning) return;
+      stopwatchRunning = true;
+      stopwatchStatus.textContent = "Running...";
+      stopwatchInterval = setInterval(() => {
+        stopwatchTime++;
+        updateStopwatchDisplay();
+        localStorage.setItem("fittrack_stopwatch", stopwatchTime);
+      }, 1000);
+    }
+
+    function pauseStopwatch() {
+      stopwatchRunning = false;
+      clearInterval(stopwatchInterval);
+      stopwatchStatus.textContent = "Paused";
+    }
+
+    function resetStopwatch() {
+      stopwatchRunning = false;
+      clearInterval(stopwatchInterval);
+      stopwatchTime = 0;
+      updateStopwatchDisplay();
+      stopwatchStatus.textContent = "Reset to 00:00:00";
+      localStorage.removeItem("fittrack_stopwatch");
+    }
+
+    document.getElementById("startStopwatch").onclick = startStopwatch;
+    document.getElementById("pauseStopwatch").onclick = pauseStopwatch;
+    document.getElementById("resetStopwatch").onclick = resetStopwatch;
+
+    updateStopwatchDisplay();
+
+    // -------------------------
+    // ⏳ COUNTDOWN TIMER
+    // -------------------------
+    let countdownInterval;
+    let countdownTime = 0;
+    let countdownRunning = false;
+    const countdownDisplay = document.getElementById("countdownDisplay");
+    const countdownStatus = document.getElementById("countdownStatus");
+
+    function updateCountdownDisplay() {
+      const mins = Math.floor(countdownTime / 60);
+      const secs = countdownTime % 60;
+      countdownDisplay.textContent = `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    }
+
+    function startCountdown() {
+      if (countdownRunning) return;
+      if (countdownTime <= 0) {
+        const inputVal = parseInt(document.getElementById("countdownInput").value);
+        if (!inputVal || inputVal <= 0) {
+          alert("Enter a valid countdown time in seconds!");
+          return;
+        }
+        countdownTime = inputVal;
+        updateCountdownDisplay();
+      }
+
+      countdownRunning = true;
+      countdownStatus.textContent = "Running...";
+      countdownInterval = setInterval(() => {
+        countdownTime--;
+        updateCountdownDisplay();
+        if (countdownTime <= 0) {
+          clearInterval(countdownInterval);
+          countdownRunning = false;
+          countdownStatus.textContent = "⏰ Time’s up! Great job!";
+          alert("⏰ Countdown finished!");
+        }
+      }, 1000);
+    }
+
+    function pauseCountdown() {
+      clearInterval(countdownInterval);
+      countdownRunning = false;
+      countdownStatus.textContent = "Paused";
+    }
+
+    function resetCountdown() {
+      clearInterval(countdownInterval);
+      countdownRunning = false;
+      countdownTime = 0;
+      updateCountdownDisplay();
+      countdownStatus.textContent = "Reset to 00:00";
+    }
+
+    document.getElementById("startCountdown").onclick = startCountdown;
+    document.getElementById("pauseCountdown").onclick = pauseCountdown;
+    document.getElementById("resetCountdown").onclick = resetCountdown;
+
+    updateCountdownDisplay();
+  </script>
+</body>
+</html>

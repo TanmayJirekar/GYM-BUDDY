@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FitTrack | Personalized Goals</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Extra styling just for goal page */
+    .goal-container {
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+    .goal-form {
+      background: rgba(255,255,255,0.05);
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255,80,0,0.2);
+    }
+    .goal-form h3 {
+      color: #ff6333;
+      margin-bottom: 1rem;
+    }
+    .goal-form label {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+    .goal-form input {
+      width: 100%;
+      padding: 0.6rem;
+      border-radius: 6px;
+      border: none;
+      background: #222;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+    .goal-form button {
+      background: linear-gradient(90deg, #ff4b2b, #ff416c);
+      border: none;
+      padding: 0.7rem 1.5rem;
+      border-radius: 8px;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .goal-display {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .goal-card {
+      background: rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(255,80,0,0.2);
+    }
+    .goal-card h4 {
+      color: #ff6333;
+      margin-bottom: 0.5rem;
+    }
+    .progress-bar {
+      height: 10px;
+      background: #333;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+    .progress-bar-fill {
+      height: 10px;
+      background: linear-gradient(90deg, #ff6333, #ff9f33);
+      width: 0%;
+      transition: width 0.4s ease;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h1 class="app-logo">FitTrack</h1>
+      </div>
+       <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="workouts.html" class="nav-link">Workouts</a></li>
+                <li><a href="nutrition.html" class="nav-link">Nutrition</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="goal.html" class="nav-link active">Goals</a></li>
+                             
+                <li><a href="recommendations.html" class="nav-link ">AI Recommendations</a></li>
+ 
+                <li><a href="planner.html" class="nav-link ">Smart Daily Planner</a></li>
+               
+        <li><a href="timer.html" class="nav-link ">Timer / Stopwatch</a></li>
+               
+                <li><a href="reminders.html" class="nav-link ">Reminders</a></li>
+        <li><a href="settings.html" class="nav-link">Settings</a></li>
+            </ul>
+    </nav>
+
+    <!-- Main -->
+    <main class="main-content">
+      <header class="header">
+        <div class="header-content">
+          <h2>Personalized Goals</h2>
+          <p>Set and track your daily fitness goals</p>
+        </div>
+      </header>
+
+      <div class="goal-container">
+        <!-- Form Section -->
+        <form class="goal-form" id="goalForm">
+          <h3>Set Your Daily Goals</h3>
+
+          <label for="goalCalories">Calories to Burn (kcal)</label>
+          <input type="number" id="goalCalories" placeholder="e.g. 500">
+
+          <label for="goalWater">Water Intake (ml)</label>
+          <input type="number" id="goalWater" placeholder="e.g. 2500">
+
+          <label for="goalSteps">Steps Count</label>
+          <input type="number" id="goalSteps" placeholder="e.g. 8000">
+
+          <label for="goalWorkouts">Workout Sessions</label>
+          <input type="number" id="goalWorkouts" placeholder="e.g. 2">
+
+          <button type="submit">Save Goals</button>
+        </form>
+
+        <!-- Display Section -->
+        <section class="goal-display" id="goalDisplay"></section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Load goals from localStorage
+    const goalForm = document.getElementById('goalForm');
+    const goalDisplay = document.getElementById('goalDisplay');
+
+    const defaultGoals = {
+      calories: 0,
+      water: 0,
+      steps: 0,
+      workouts: 0
+    };
+
+    function loadGoals() {
+      const goals = JSON.parse(localStorage.getItem('fittrack_goals')) || defaultGoals;
+      displayGoals(goals);
+    }
+
+    function displayGoals(goals) {
+      goalDisplay.innerHTML = `
+        <div class="goal-card">
+          <h4>Calories Burned</h4>
+          <p>${goals.calories} kcal</p>
+          <div class="progress-bar"><div class="progress-bar-fill" style="width:${calcProgress('calories', goals)}%"></div></div>
+        </div>
+
+        <div class="goal-card">
+          <h4>Water Intake</h4>
+          <p>${goals.water} ml</p>
+          <div class="progress-bar"><div class="progress-bar-fill" style="width:${calcProgress('water', goals)}%"></div></div>
+        </div>
+
+        <div class="goal-card">
+          <h4>Steps</h4>
+          <p>${goals.steps} steps</p>
+          <div class="progress-bar"><div class="progress-bar-fill" style="width:${calcProgress('steps', goals)}%"></div></div>
+        </div>
+
+        <div class="goal-card">
+          <h4>Workouts</h4>
+          <p>${goals.workouts} sessions</p>
+          <div class="progress-bar"><div class="progress-bar-fill" style="width:${calcProgress('workouts', goals)}%"></div></div>
+        </div>
+      `;
+    }
+
+    // Dummy logic to simulate current progress
+    function calcProgress(type, goals) {
+      // You can replace this with real dashboard data later
+      const current = JSON.parse(localStorage.getItem('fittrack_data')) || {
+        caloriesBurned: 200,
+        waterIntake: 1000,
+        stepsCount: 3000,
+        workoutsDone: 1
+      };
+      switch(type) {
+        case 'calories': return Math.min((current.caloriesBurned / goals.calories) * 100, 100) || 0;
+        case 'water': return Math.min((current.waterIntake / goals.water) * 100, 100) || 0;
+        case 'steps': return Math.min((current.stepsCount / goals.steps) * 100, 100) || 0;
+        case 'workouts': return Math.min((current.workoutsDone / goals.workouts) * 100, 100) || 0;
+        default: return 0;
+      }
+    }
+
+    goalForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const goals = {
+        calories: parseInt(document.getElementById('goalCalories').value) || 0,
+        water: parseInt(document.getElementById('goalWater').value) || 0,
+        steps: parseInt(document.getElementById('goalSteps').value) || 0,
+        workouts: parseInt(document.getElementById('goalWorkouts').value) || 0
+      };
+      localStorage.setItem('fittrack_goals', JSON.stringify(goals));
+      displayGoals(goals);
+      alert('✅ Goals saved successfully!');
+    });
+
+    loadGoals();
+  </script>
+</body>
+</html>

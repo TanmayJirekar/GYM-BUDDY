@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Reminders | FitTrack</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="app-logo">FitTrack</h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+           <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="workouts.html" class="nav-link">Workouts</a></li>
+                <li><a href="nutrition.html" class="nav-link">Nutrition</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="goal.html" class="nav-link active">Goals</a></li>
+                             
+                <li><a href="recommendations.html" class="nav-link ">AI Recommendations</a></li>
+ 
+                <li><a href="planner.html" class="nav-link ">Smart Daily Planner</a></li>
+               
+        <li><a href="timer.html" class="nav-link ">Timer / Stopwatch</a></li>
+               
+                <li><a href="reminders.html" class="nav-link active">Reminders</a></li>
+      
+                <li><a href="settings.html" class="nav-link">Settings</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="theme-toggle" id="themeToggle"></button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-content">
+                    <h2>Daily Reminders</h2>
+                    <p id="currentDate"></p>
+                </div>
+            </header>
+
+            <section class="dashboard-content">
+                <!-- Add Reminder Form -->
+                <section class="add-reminder-section">
+                    <h3>Set a New Reminder</h3>
+                    <div class="reminder-form">
+                        <input type="time" id="reminderTime" class="input-field" required>
+                        <input type="text" id="reminderTask" class="input-field" placeholder="Enter your task..." required>
+                        <button id="addReminderBtn" class="action-btn">Add Reminder</button>
+                    </div>
+                </section>
+
+                <!-- Reminder List -->
+                <section class="reminder-list-section">
+                    <h3>Today's Reminders</h3>
+                    <div id="reminderList" class="activity-list">
+                        <p class="empty-state">No reminders yet. Add one!</p>
+                    </div>
+                </section>
+            </section>
+        </main>
+    </div>
+
+    <!-- Reminder Alert Modal -->
+    <div id="alertModal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="alertClose">&times;</button>
+            <h3>⏰ Reminder Alert!</h3>
+            <p id="alertText"></p>
+        </div>
+    </div>
+
+    <script>
+        // Date display
+        document.getElementById("currentDate").textContent = new Date().toDateString();
+
+        const reminderTime = document.getElementById("reminderTime");
+        const reminderTask = document.getElementById("reminderTask");
+        const addReminderBtn = document.getElementById("addReminderBtn");
+        const reminderList = document.getElementById("reminderList");
+        const alertModal = document.getElementById("alertModal");
+        const alertText = document.getElementById("alertText");
+        const alertClose = document.getElementById("alertClose");
+
+        let reminders = JSON.parse(localStorage.getItem("fittrack_reminders")) || [];
+
+        function saveReminders() {
+            localStorage.setItem("fittrack_reminders", JSON.stringify(reminders));
+        }
+
+        function renderReminders() {
+            reminderList.innerHTML = "";
+            if (reminders.length === 0) {
+                reminderList.innerHTML = `<p class="empty-state">No reminders yet. Add one!</p>`;
+                return;
+            }
+            reminders.forEach((r, i) => {
+                const div = document.createElement("div");
+                div.classList.add("activity-item");
+                div.innerHTML = `
+                    <p><strong>${r.time}</strong> — ${r.task}</p>
+                    <button class="action-btn small-btn" onclick="deleteReminder(${i})">🗑️ Delete</button>
+                `;
+                reminderList.appendChild(div);
+            });
+        }
+
+        function deleteReminder(index) {
+            reminders.splice(index, 1);
+            saveReminders();
+            renderReminders();
+        }
+
+        addReminderBtn.addEventListener("click", () => {
+            const time = reminderTime.value;
+            const task = reminderTask.value.trim();
+            if (!time || !task) return alert("Please enter both time and task!");
+            reminders.push({ time, task, done: false });
+            saveReminders();
+            renderReminders();
+            reminderTime.value = "";
+            reminderTask.value = "";
+        });
+
+        // Reminder alert system
+        setInterval(() => {
+            const now = new Date();
+            const currentTime = now.toTimeString().slice(0, 5);
+            reminders.forEach(reminder => {
+                if (reminder.time === currentTime && !reminder.notified) {
+                    showAlert(reminder.task);
+                    reminder.notified = true;
+                    saveReminders();
+                }
+            });
+        }, 1000);
+
+        function showAlert(task) {
+            alertText.textContent = `It's time for: ${task}`;
+            alertModal.style.display = "flex";
+        }
+
+        alertClose.addEventListener("click", () => {
+            alertModal.style.display = "none";
+        });
+
+        renderReminders();
+    </script>
+</body>
+</html>

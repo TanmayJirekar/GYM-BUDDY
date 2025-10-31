@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Daily Planner | FitTrack</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .planner-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .planner-table th, .planner-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .planner-table th {
+            background: rgba(255,255,255,0.1);
+            font-weight: 600;
+        }
+
+        .add-row-btn {
+            background: var(--accent-color, #ff4500);
+            color: #fff;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        .add-row-btn:hover {
+            opacity: 0.8;
+        }
+
+        .complete-btn {
+            background: #28a745;
+            color: #fff;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .incomplete-btn {
+            background: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .summary-box {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+        }
+
+        .summary-box p {
+            margin: 5px 0;
+        }
+
+        .completed {
+            text-decoration: line-through;
+            color: #9efc9e;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="app-logo">FitTrack</h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="workouts.html" class="nav-link">Workouts</a></li>
+                <li><a href="nutrition.html" class="nav-link">Nutrition</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="goal.html" class="nav-link ">Goals</a></li>
+                             
+                <li><a href="recommendations.html" class="nav-link ">AI Recommendations</a></li>
+ 
+                <li><a href="planner.html" class="nav-link active">Smart Daily Planner</a></li>
+               
+        <li><a href="timer.html" class="nav-link ">Timer / Stopwatch</a></li>
+               
+                <li><a href="reminders.html" class="nav-link ">Reminders</a></li>
+        <li><a href="settings.html" class="nav-link">Settings</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="theme-toggle" id="themeToggle"></button>
+            </div>
+        </nav>
+
+        <!-- Main -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-content">
+                    <h2>Smart Daily Planner</h2>
+                    <p id="currentDate" class="date-display"></p>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                
+
+                <!-- Add Row Form -->
+                <section class="quick-actions">
+                    <h3>Add New Activity</h3>
+                    <div class="action-buttons">
+                        <input type="time" id="timeInput" class="action-input" />
+                        <input type="text" id="activityInput" placeholder="Activity" class="action-input" />
+                        <input type="text" id="resourcesInput" placeholder="Resources used" class="action-input" />
+                        <button class="add-row-btn" id="addRowBtn">➕ Add Row</button>
+                    </div>
+                </section>
+
+                <!-- Planner Table -->
+                <section class="progress-section">
+                    <h3>Today's Plan</h3>
+                    <table class="planner-table" id="plannerTable">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Activity</th>
+                                <th>Resources</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="plannerBody">
+                            <tr><td colspan="5" style="text-align:center; opacity:0.7;">No activities yet. Add your first one!</td></tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <!-- Summary -->
+                <section class="summary-box">
+                    <h3>Daily Summary</h3>
+                    <p id="summaryText">No data yet.</p>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const currentDate = document.getElementById("currentDate");
+        const plannerBody = document.getElementById("plannerBody");
+        const summaryText = document.getElementById("summaryText");
+        const addRowBtn = document.getElementById("addRowBtn");
+
+        currentDate.textContent = new Date().toDateString();
+        const todayKey = `fittrack_planner_${new Date().toDateString()}`;
+
+        // Load from localStorage
+        let activities = JSON.parse(localStorage.getItem(todayKey)) || [];
+
+        const renderTable = () => {
+            if (activities.length === 0) {
+                plannerBody.innerHTML = `<tr><td colspan="5" style="text-align:center; opacity:0.7;">No activities yet. Add your first one!</td></tr>`;
+                summaryText.textContent = "No data yet.";
+                return;
+            }
+
+            plannerBody.innerHTML = "";
+            let completed = 0;
+
+            activities.forEach((act, index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${act.time}</td>
+                    <td class="${act.completed ? 'completed' : ''}">${act.activity}</td>
+                    <td>${act.resources}</td>
+                    <td>${act.completed ? '✅ Complete' : '❌ Incomplete'}</td>
+                    <td>
+                        <button class="${act.completed ? 'incomplete-btn' : 'complete-btn'}" data-index="${index}">
+                            ${act.completed ? 'Mark Incomplete' : 'Mark Complete'}
+                        </button>
+                    </td>
+                `;
+                plannerBody.appendChild(row);
+                if (act.completed) completed++;
+            });
+
+            const percent = Math.round((completed / activities.length) * 100);
+            summaryText.innerHTML = `
+                ✅ Completed: ${completed} / ${activities.length} <br>
+                📊 Progress: ${percent}%
+            `;
+        };
+
+        addRowBtn.addEventListener("click", () => {
+            const time = document.getElementById("timeInput").value;
+            const activity = document.getElementById("activityInput").value.trim();
+            const resources = document.getElementById("resourcesInput").value.trim();
+
+            if (!time || !activity) {
+                alert("Please enter time and activity.");
+                return;
+            }
+
+            activities.push({ time, activity, resources, completed: false });
+            localStorage.setItem(todayKey, JSON.stringify(activities));
+            renderTable();
+
+            document.getElementById("timeInput").value = "";
+            document.getElementById("activityInput").value = "";
+            document.getElementById("resourcesInput").value = "";
+        });
+
+        plannerBody.addEventListener("click", (e) => {
+            if (e.target.tagName === "BUTTON") {
+                const index = e.target.getAttribute("data-index");
+                activities[index].completed = !activities[index].completed;
+                localStorage.setItem(todayKey, JSON.stringify(activities));
+                renderTable();
+            }
+        });
+
+        renderTable();
+    </script>
+</body>
+</html>

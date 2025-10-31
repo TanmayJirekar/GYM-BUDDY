@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Recommendations | FitTrack</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="app-logo">FitTrack</h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+           <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="workouts.html" class="nav-link">Workouts</a></li>
+                <li><a href="nutrition.html" class="nav-link">Nutrition</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="goal.html" class="nav-link ">Goals</a></li>
+                               <li><a href="recommendations.html" class="nav-link active">AI Recommendations</a></li>
+ 
+                <li><a href="planner.html" class="nav-link ">Smart Daily Planner</a></li>
+                            
+        <li><a href="timer.html" class="nav-link ">Timer / Stopwatch</a></li>
+              
+                <li><a href="reminders.html" class="nav-link ">Reminders</a></li>
+        <li><a href="settings.html" class="nav-link">Settings</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode"></button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <h2>AI-Based Recommendations</h2>
+                    <p id="currentDate" class="date-display"></p>
+                </div>
+            </header>
+
+            <!-- Recommendation Content -->
+            <div class="dashboard-content">
+               
+
+                <section class="summary-cards">
+                    <div class="card">
+                        <div class="card-icon">⚙️</div>
+                        <div class="card-content">
+                            <p class="card-label">Current Status</p>
+                            <p class="card-value" id="fitnessStatus">Analyzing...</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">💡</div>
+                        <div class="card-content">
+                            <p class="card-label">Today's AI Tip</p>
+                            <p class="card-value" id="aiTip">Loading...</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🥗</div>
+                        <div class="card-content">
+                            <p class="card-label">Nutrition Advice</p>
+                            <p class="card-value" id="nutritionAdvice">Fetching...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Interactive AI Recommendation -->
+                <section class="progress-section">
+                    <h3>Get Personalized Suggestion</h3>
+                    <div class="action-buttons">
+                        <input type="number" id="stepsInput" placeholder="Steps walked today" class="action-input">
+                        <input type="number" id="caloriesInput" placeholder="Calories consumed" class="action-input">
+                        <input type="number" id="waterInput" placeholder="Water (ml)" class="action-input">
+                        <button class="action-btn" id="generateAI">
+                            🤖 Generate Recommendation
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Display Results -->
+                <section class="recent-activity">
+                    <h3>AI Suggestions</h3>
+                    <div id="aiResults" class="activity-list">
+                        <p class="empty-state">Enter your data to get recommendations.</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Basic JS Simulation of AI Recommendation
+        const dateDisplay = document.getElementById("currentDate");
+        dateDisplay.textContent = new Date().toDateString();
+
+        const fitnessStatus = document.getElementById("fitnessStatus");
+        const aiTip = document.getElementById("aiTip");
+        const nutritionAdvice = document.getElementById("nutritionAdvice");
+
+        const aiTips = [
+            "Take a 10-min walk after each meal to boost metabolism.",
+            "Add protein to every meal to support muscle recovery.",
+            "Sleep 7-8 hours to optimize fat burning.",
+            "Try stretching after workouts to reduce soreness."
+        ];
+
+        const nutritionTips = [
+            "Include leafy greens and whole grains in your diet.",
+            "Drink green tea for natural fat burning.",
+            "Avoid sugary drinks; replace them with water.",
+            "Eat balanced portions — not too much, not too little."
+        ];
+
+        // Display Random Base Tips
+        aiTip.textContent = aiTips[Math.floor(Math.random() * aiTips.length)];
+        nutritionAdvice.textContent = nutritionTips[Math.floor(Math.random() * nutritionTips.length)];
+        fitnessStatus.textContent = "Data synced successfully ✅";
+
+        // Generate AI Recommendations based on input
+        document.getElementById("generateAI").addEventListener("click", () => {
+            const steps = Number(document.getElementById("stepsInput").value);
+            const calories = Number(document.getElementById("caloriesInput").value);
+            const water = Number(document.getElementById("waterInput").value);
+            const aiResults = document.getElementById("aiResults");
+
+            if (!steps || !calories || !water) {
+                aiResults.innerHTML = `<p class='empty-state'>⚠️ Please fill all the fields.</p>`;
+                return;
+            }
+
+            let recommendation = `<ul class='activity-list'>`;
+
+            if (steps < 5000) recommendation += `<li>🏃‍♂️ Try increasing your steps — aim for at least 8,000 today.</li>`;
+            else recommendation += `<li>✅ Great! You're active enough today.</li>`;
+
+            if (calories > 2500) recommendation += `<li>🍔 Your calorie intake is high — balance it with 20 mins cardio.</li>`;
+            else recommendation += `<li>🥗 Calorie intake looks good for maintenance.</li>`;
+
+            if (water < 2000) recommendation += `<li>💧 Drink more water — hydration is key!</li>`;
+            else recommendation += `<li>🫗 Hydration level is excellent!</li>`;
+
+            recommendation += `<li>💭 Tip: ${aiTips[Math.floor(Math.random() * aiTips.length)]}</li>`;
+            recommendation += `</ul>`;
+
+            aiResults.innerHTML = recommendation;
+        });
+    </script>
+</body>
+</html>
