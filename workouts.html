@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workouts - Gym & Health Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="app-logo">FitTrack</h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="workouts.html" class="nav-link active">Workouts</a></li>
+                <li><a href="nutrition.html" class="nav-link">Nutrition</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="settings.html" class="nav-link">Settings</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                    
+                    <!-- <span class="theme-icon">🌙</span> -->
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-content">
+                    <h2>Workout Tracker</h2>
+                    <p id="currentDate" class="date-display"></p>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- Add Workout Form -->
+                <section class="form-section">
+                    <h3>Log New Workout</h3>
+                    <form id="workoutForm" class="form">
+                        <div class="form-group">
+                            <label for="exerciseName">Exercise Name</label>
+                            <input type="text" id="exerciseName" placeholder="e.g., Running, Push-ups" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exerciseType">Exercise Type</label>
+                            <select id="exerciseType" required>
+                                <option value="">Select Type</option>
+                                <option value="cardio">Cardio</option>
+                                <option value="strength">Strength</option>
+                                <option value="yoga">Yoga</option>
+                                <option value="hiit">HIIT</option>
+                                <option value="stretching">Stretching</option>
+                                <option value="sports">Sports</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="duration">Duration (minutes)</label>
+                                <input type="number" id="duration" min="1" placeholder="30" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="intensity">Intensity</label>
+                                <select id="intensity" required>
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="notes">Notes</label>
+                            <textarea id="notes" placeholder="How did you feel? Any notes?"></textarea>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Log Workout</button>
+                    </form>
+                </section>
+
+                <!-- Workouts List -->
+                <section class="list-section">
+                    <div class="section-header">
+                        <h3>Today's Workouts</h3>
+                        <p class="total-calories" id="totalCaloriesBurned">Total: 0 kcal</p>
+                    </div>
+                    <div id="workoutsList" class="items-list">
+                        <p class="empty-state">No workouts logged yet. Start your first workout!</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Edit -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/workouts.js"></script>
+</body>
+</html>

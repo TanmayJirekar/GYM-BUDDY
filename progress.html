@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Progress - Gym & Health Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="app-logo">FitTrack</h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="workouts.html" class="nav-link">Workouts</a></li>
+                <li><a href="nutrition.html" class="nav-link">Nutrition</a></li>
+                <li><a href="progress.html" class="nav-link active">Progress</a></li>
+                <li><a href="settings.html" class="nav-link">Settings</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                    <!-- <span class="theme-icon">🌙</span> -->
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-content">
+                    <h2>Progress Tracker</h2>
+                    <p id="currentDate" class="date-display"></p>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- Time Period Selector -->
+                <section class="period-selector">
+                    <button class="period-btn active" data-period="week">This Week</button>
+                    <button class="period-btn" data-period="month">This Month</button>
+                    <button class="period-btn" data-period="all">All Time</button>
+                </section>
+
+                <!-- Stats Cards -->
+                <section class="stats-cards">
+                    <div class="stat-card">
+                        <div class="stat-icon">🏋️</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Total Workouts</p>
+                            <p class="stat-value" id="totalWorkouts">0</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Avg Calories Burned</p>
+                            <p class="stat-value" id="avgCaloriesBurned">0</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">🍎</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Avg Calories Consumed</p>
+                            <p class="stat-value" id="avgCaloriesConsumed">0</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-content">
+                            <p class="stat-label">Current Streak</p>
+                            <p class="stat-value" id="currentStreak">0</p>
+                            <p class="stat-unit">days</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Charts Section -->
+                <section class="charts-section">
+                    <div class="chart-container">
+                        <h3>Weekly Workouts</h3>
+                        <div id="workoutChart" class="chart"></div>
+                    </div>
+
+                    <div class="chart-container">
+                        <h3>Calorie Balance</h3>
+                        <div id="calorieChart" class="chart"></div>
+                    </div>
+                </section>
+
+                <!-- Detailed Stats -->
+                <section class="detailed-stats">
+                    <h3>Detailed Statistics</h3>
+                    <div class="stats-table">
+                        <div class="stat-row">
+                            <span class="stat-name">Total Workout Time</span>
+                            <span class="stat-number" id="totalWorkoutTime">0 min</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-name">Total Calories Burned</span>
+                            <span class="stat-number" id="totalCaloriesBurned">0 kcal</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-name">Total Calories Consumed</span>
+                            <span class="stat-number" id="totalCaloriesConsumedStat">0 kcal</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-name">Net Calories</span>
+                            <span class="stat-number" id="netCalories">0 kcal</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Reset Data -->
+                <section class="danger-zone">
+                    <h3>Data Management</h3>
+                    <button id="resetDataBtn" class="btn btn-danger">Reset All Data</button>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/progress.js"></script>
+</body>
+</html>

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nutrition - Gym & Health Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="app-logo">FitTrack</h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="workouts.html" class="nav-link">Workouts</a></li>
+                <li><a href="nutrition.html" class="nav-link active">Nutrition</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="settings.html" class="nav-link">Settings</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                    <!-- <span class="theme-icon"></span> -->
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-content">
+                    <h2>Nutrition Tracker</h2>
+                    <p id="currentDate" class="date-display"></p>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- Calorie Summary -->
+                <section class="summary-section">
+                    <div class="calorie-card">
+                        <div class="calorie-info">
+                            <p class="label">Daily Goal</p>
+                            <p class="value" id="dailyGoal">2000</p>
+                            <p class="unit">kcal</p>
+                        </div>
+                        <div class="calorie-info">
+                            <p class="label">Consumed</p>
+                            <p class="value" id="totalConsumed">0</p>
+                            <p class="unit">kcal</p>
+                        </div>
+                        <div class="calorie-info">
+                            <p class="label">Remaining</p>
+                            <p class="value" id="remaining">2000</p>
+                            <p class="unit">kcal</p>
+                        </div>
+                    </div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar" id="calorieProgressBar"></div>
+                    </div>
+                </section>
+
+                <!-- Add Meal Form -->
+                <section class="form-section">
+                    <h3>Log Meal</h3>
+                    <form id="mealForm" class="form">
+                        <div class="form-group">
+                            <label for="mealName">Food Item</label>
+                            <input type="text" id="mealName" placeholder="e.g., Chicken Breast" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="mealCategory">Category</label>
+                            <select id="mealCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="breakfast">Breakfast</option>
+                                <option value="lunch">Lunch</option>
+                                <option value="dinner">Dinner</option>
+                                <option value="snack">Snack</option>
+                            </select>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="mealCalories">Calories</label>
+                                <input type="number" id="mealCalories" min="1" placeholder="150" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="mealQuantity">Quantity (g)</label>
+                                <input type="number" id="mealQuantity" min="1" placeholder="100">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Log Meal</button>
+                    </form>
+                </section>
+
+                <!-- Meals by Category -->
+                <section class="list-section">
+                    <h3>Today's Meals</h3>
+                    <div class="meals-by-category">
+                        <div class="category-group">
+                            <h4>Breakfast</h4>
+                            <div id="breakfastList" class="category-items">
+                                <p class="empty-state">No meals logged</p>
+                            </div>
+                        </div>
+                        <div class="category-group">
+                            <h4>Lunch</h4>
+                            <div id="lunchList" class="category-items">
+                                <p class="empty-state">No meals logged</p>
+                            </div>
+                        </div>
+                        <div class="category-group">
+                            <h4>Dinner</h4>
+                            <div id="dinnerList" class="category-items">
+                                <p class="empty-state">No meals logged</p>
+                            </div>
+                        </div>
+                        <div class="category-group">
+                            <h4>Snacks</h4>
+                            <div id="snackList" class="category-items">
+                                <p class="empty-state">No meals logged</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/nutrition.js"></script>
+</body>
+</html>

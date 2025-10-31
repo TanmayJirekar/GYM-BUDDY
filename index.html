@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gym & Health Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="app-logo">FitTrack</h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link active">Dashboard</a></li>
+                <li><a href="workouts.html" class="nav-link">Workouts</a></li>
+                <li><a href="nutrition.html" class="nav-link">Nutrition</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="settings.html" class="nav-link">Settings</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                    <!-- <span class="theme-icon">🌙</span> -->
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-content">
+                    <h2 id="greeting">Good Morning</h2>
+                    <p id="currentDate" class="date-display"></p>
+                </div>
+                <div class="header-actions">
+                    <button class="notification-btn" id="notificationBtn" title="Enable notifications">
+                        🔔
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Motivational Quote -->
+                <section class="quote-section">
+                    <p id="dailyQuote" class="quote-text"></p>
+                </section>
+
+                <!-- Summary Cards -->
+                <section class="summary-cards">
+                    <div class="card">
+                        <div class="card-icon">🔥</div>
+                        <div class="card-content">
+                            <p class="card-label">Calories Burned</p>
+                            <p class="card-value" id="caloriesBurned">0</p>
+                            <p class="card-unit">kcal</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">🍎</div>
+                        <div class="card-content">
+                            <p class="card-label">Calories Consumed</p>
+                            <p class="card-value" id="caloriesConsumed">0</p>
+                            <p class="card-unit">kcal</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">💧</div>
+                        <div class="card-content">
+                            <p class="card-label">Water Intake</p>
+                            <p class="card-value" id="waterIntake">0</p>
+                            <p class="card-unit">ml</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-icon">👟</div>
+                        <div class="card-content">
+                            <p class="card-label">Steps</p>
+                            <p class="card-value" id="stepsCount">0</p>
+                            <p class="card-unit">steps</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Progress Rings -->
+                <section class="progress-section">
+                    <h3>Today's Progress</h3>
+                    <div class="progress-rings">
+                        <div class="progress-ring-container">
+                            <svg class="progress-ring" width="120" height="120">
+                                <circle cx="60" cy="60" r="54" class="progress-ring-bg"></circle>
+                                <circle cx="60" cy="60" r="54" class="progress-ring-fill" id="caloriesRing"></circle>
+                            </svg>
+                            <div class="ring-label">
+                                <p class="ring-value" id="caloriesPercent">0%</p>
+                                <p class="ring-text">Calories</p>
+                            </div>
+                        </div>
+
+                        <div class="progress-ring-container">
+                            <svg class="progress-ring" width="120" height="120">
+                                <circle cx="60" cy="60" r="54" class="progress-ring-bg"></circle>
+                                <circle cx="60" cy="60" r="54" class="progress-ring-fill" id="waterRing"></circle>
+                            </svg>
+                            <div class="ring-label">
+                                <p class="ring-value" id="waterPercent">0%</p>
+                                <p class="ring-text">Water</p>
+                            </div>
+                        </div>
+
+                        <div class="progress-ring-container">
+                            <svg class="progress-ring" width="120" height="120">
+                                <circle cx="60" cy="60" r="54" class="progress-ring-bg"></circle>
+                                <circle cx="60" cy="60" r="54" class="progress-ring-fill" id="workoutRing"></circle>
+                            </svg>
+                            <div class="ring-label">
+                                <p class="ring-value" id="workoutPercent">0%</p>
+                                <p class="ring-text">Workouts</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Quick Actions -->
+                <section class="quick-actions">
+                    <h3>Quick Actions</h3>
+                    <div class="action-buttons">
+                        <button class="action-btn" id="addWaterBtn">
+                            <span class="action-icon">💧</span>
+                            <span>Add Water</span>
+                        </button>
+                        <button class="action-btn" id="addWorkoutBtn">
+                            <span class="action-icon">🏋️</span>
+                            <span>Log Workout</span>
+                        </button>
+                        <button class="action-btn" id="addMealBtn">
+                            <span class="action-icon">🍽️</span>
+                            <span>Log Meal</span>
+                        </button>
+                        <button class="action-btn" id="addStepsBtn">
+                            <span class="action-icon">👟</span>
+                            <span>Add Steps</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Recent Activity -->
+                <section class="recent-activity">
+                    <h3>Recent Activity</h3>
+                    <div id="activityList" class="activity-list">
+                        <p class="empty-state">No activity yet. Start tracking!</p>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal for Quick Actions -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

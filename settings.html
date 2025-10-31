@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings - Gym & Health Tracker</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Navigation Sidebar -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="app-logo">FitTrack</h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="workouts.html" class="nav-link">Workouts</a></li>
+                <li><a href="nutrition.html" class="nav-link">Nutrition</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="settings.html" class="nav-link active">Settings</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                    <!-- <span class="theme-icon">🌙</span> -->
+                </button>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <div class="header-content">
+                    <h2>Settings</h2>
+                    <p>Customize your fitness tracker</p>
+                </div>
+            </header>
+
+            <div class="page-content">
+                <!-- User Profile Section -->
+                <section class="settings-section">
+                    <h3>User Profile</h3>
+                    <form id="profileForm" class="form">
+                        <div class="form-group">
+                            <label for="userName">Name</label>
+                            <input type="text" id="userName" placeholder="Your Name" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="userAge">Age</label>
+                                <input type="number" id="userAge" min="1" max="120" placeholder="25" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="userGender">Gender</label>
+                                <select id="userGender" required>
+                                    <option value="">Select Gender</option>
+                                    <option value="male">Male</option>
+                                    <option value="female">Female</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="userHeight">Height (cm)</label>
+                                <input type="number" id="userHeight" min="1" placeholder="175" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="userWeight">Weight (kg)</label>
+                                <input type="number" id="userWeight" min="1" step="0.1" placeholder="70" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="activityLevel">Activity Level</label>
+                            <select id="activityLevel" required>
+                                <option value="sedentary">Sedentary (little or no exercise)</option>
+                                <option value="light">Light (exercise 1-3 days/week)</option>
+                                <option value="moderate" selected>Moderate (exercise 3-5 days/week)</option>
+                                <option value="active">Active (exercise 6-7 days/week)</option>
+                                <option value="veryactive">Very Active (intense exercise daily)</option>
+                            </select>
+                        </div>
+
+                        <div class="info-box">
+                            <p><strong>Daily Calorie Goal:</strong> <span id="dailyGoalDisplay">2000</span> kcal</p>
+                            <p><strong>BMR:</strong> <span id="bmrDisplay">1500</span> kcal</p>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Profile</button>
+                    </form>
+                </section>
+
+                <!-- Preferences Section -->
+                <section class="settings-section">
+                    <h3>Preferences</h3>
+                    <form id="preferencesForm" class="form">
+                        <div class="form-group">
+                            <label for="units">Units</label>
+                            <select id="units">
+                                <option value="metric">Metric (kg, cm)</option>
+                                <option value="imperial">Imperial (lb, in)</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="waterGoal">Daily Water Goal (ml)</label>
+                            <input type="number" id="waterGoal" min="500" step="100" value="2000">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="workoutGoal">Weekly Workout Goal</label>
+                            <input type="number" id="workoutGoal" min="1" value="5">
+                        </div>
+
+                        <div class="toggle-group">
+                            <label for="notificationsEnabled">
+                                <input type="checkbox" id="notificationsEnabled" checked>
+                                <span>Enable Notifications</span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <label for="reminderWater">
+                                <input type="checkbox" id="reminderWater" checked>
+                                <span>Water Reminder (every 2 hours)</span>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Save Preferences</button>
+                    </form>
+                </section>
+
+                <!-- About Section -->
+                <section class="settings-section">
+                    <h3>About</h3>
+                    <div class="about-content">
+                        <p><strong>FitTrack</strong> - Your Personal Fitness Companion</p>
+                        <p>Version 1.0</p>
+                       </div>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/settings.js"></script>
+</body>
+</html>
