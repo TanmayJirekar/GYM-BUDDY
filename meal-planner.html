@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Meal Planner - FitTrack</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* --- FitTrack Theme Extension --- */
+   body {
+  background: #0d0d0d;
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  min-height: 100vh;
+  margin: 0;
+  overflow-x: hidden;
+}
+    .main-content {
+  flex: 1;
+  width: 100%;
+  padding: 2rem;
+  background: #121212;
+  overflow-y: auto;
+  box-sizing: border-box;
+    }
+    h2.section-title {
+      color: #ff6600;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px rgba(255, 102, 0, 0.4);
+      font-size: 1.8rem;
+    }
+    .meal-section {
+      background: #1b1b1b;
+      border: 2px solid #ff4500;
+      border-radius: 15px;
+      padding: 1rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 0 15px rgba(255, 69, 0, 0.3);
+    }
+    .meal-section h3 {
+      color: #ff6600;
+      margin-bottom: 0.8rem;
+      font-size: 1.4rem;
+    }
+    select, button {
+      background: #ff4500;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    select {
+      background: #262626;
+      color: #fff;
+      border: 1px solid #ff6600;
+      margin-right: 1rem;
+    }
+    select:focus {
+      outline: none;
+      border-color: #ff4500;
+      box-shadow: 0 0 10px rgba(255, 69, 0, 0.5);
+    }
+    button:hover {
+      background: #ff6600;
+      box-shadow: 0 0 15px rgba(255, 102, 0, 0.6);
+    }
+    .remove-btn {
+      background: transparent;
+      border: 1px solid #ff4500;
+      color: #ff4500;
+      border-radius: 5px;
+      padding: 0.3rem 0.7rem;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .remove-btn:hover {
+      background: #ff4500;
+      color: #fff;
+    }
+    .summary-box {
+      background: #1b1b1b;
+      border: 2px solid #ff6600;
+      border-radius: 15px;
+      padding: 1rem;
+      text-align: center;
+      box-shadow: 0 0 15px rgba(255, 69, 0, 0.4);
+    }
+    .summary-box h3 {
+      color: #ff6600;
+      margin-bottom: 0.8rem;
+    }
+    .summary-values {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1rem;
+    }
+    .summary-item {
+      background: #242424;
+      padding: 0.7rem 1.2rem;
+      border-radius: 10px;
+      border: 1px solid #ff4500;
+    }
+    .summary-item span {
+      display: block;
+      color: #ff6600;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    /* Custom Meal Dialog */
+    .dialog-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .dialog-box {
+      background: #1b1b1b;
+      border: 2px solid #ff6600;
+      border-radius: 15px;
+      padding: 1.5rem;
+      width: 300px;
+      box-shadow: 0 0 15px rgba(255, 69, 0, 0.4);
+      text-align: center;
+    }
+    .dialog-box h3 {
+      color: #ff6600;
+      margin-bottom: 1rem;
+    }
+    .dialog-box input {
+      width: 90%;
+      margin: 0.5rem 0;
+      padding: 0.5rem;
+      border: 1px solid #ff6600;
+      border-radius: 8px;
+      background: #242424;
+      color: #fff;
+    }
+    .dialog-box button {
+      margin-top: 1rem;
+    }
+    .app-container {
+  display: flex;
+  width: 100%;
+}
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+     <nav class="sidebar">
+            <div class="sidebar-header">
+                <h1 class="app-logo">FitTrack</h1>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+          <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="workouts.html" class="nav-link">Workouts</a></li>
+                <li><a href="recovery.html" class="nav-link">Track Muscle Recovery</a></li>
+                <li><a href="nutrition.html" class="nav-link">Nutrition</a></li>
+                <li><a href="meals.html" class="nav-link ">Meals</a></li>
+                <li><a href="progress.html" class="nav-link">Progress</a></li>
+                <li><a href="goal.html" class="nav-link ">Goals</a></li>
+                <li><a href="recommendations.html" class="nav-link ">AI Recommendations</a></li>
+                <li><a href="planner.html" class="nav-link ">Smart Daily Planner</a></li>
+                <li><a href="meal-planner.html" class="nav-link active">Meal planner</a></li>
+                <li><a href="timer.html" class="nav-link ">Timer / Stopwatch</a></li>
+                <li><a href="reminders.html" class="nav-link ">Reminders</a></li>
+                <li><a href="settings.html" class="nav-link">Settings</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                    <!-- <span class="theme-icon">🌙</span> -->
+                </button>
+            </div>
+        </nav>
+
+
+    <main class="main-content">
+      <header class="header">
+        <h2>🍽️ Meal Planner</h2>
+        <p id="currentDate"></p>
+      </header>
+
+      <div class="meal-section" id="breakfastSection">
+        <h3>🌞 Breakfast</h3>
+        <select id="breakfastSelect"></select>
+        <button onclick="addMeal('breakfast')">Add</button>
+        <ul id="breakfastList"></ul>
+      </div>
+
+      <div class="meal-section" id="lunchSection">
+        <h3>🌤️ Lunch</h3>
+        <select id="lunchSelect"></select>
+        <button onclick="addMeal('lunch')">Add</button>
+        <ul id="lunchList"></ul>
+      </div>
+
+      <div class="meal-section" id="dinnerSection">
+        <h3>🌙 Dinner</h3>
+        <select id="dinnerSelect"></select>
+        <button onclick="addMeal('dinner')">Add</button>
+        <ul id="dinnerList"></ul>
+      </div>
+
+      <div class="meal-section" id="snackSection">
+        <h3>🍎 Snacks</h3>
+        <select id="snackSelect"></select>
+        <button onclick="addMeal('snack')">Add</button>
+        <ul id="snackList"></ul>
+      </div>
+
+      <div class="summary-box">
+        <h3>Today's Nutrition Summary</h3>
+        <div class="summary-values">
+          <div class="summary-item">Calories <span id="totalCalories">0</span></div>
+          <div class="summary-item">Protein <span id="totalProtein">0</span> g</div>
+          <div class="summary-item">Carbs <span id="totalCarbs">0</span> g</div>
+          <div class="summary-item">Fats <span id="totalFats">0</span> g</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Custom Meal Dialog -->
+  <div class="dialog-overlay" id="customMealDialog">
+    <div class="dialog-box">
+      <h3>Add Custom Meal</h3>
+      <input type="text" id="customMealName" placeholder="Meal name">
+      <input type="number" id="customCalories" placeholder="Calories (kcal)">
+      <input type="number" id="customProtein" placeholder="Protein (g)">
+      <input type="number" id="customCarbs" placeholder="Carbs (g)">
+      <input type="number" id="customFats" placeholder="Fats (g)">
+      <br>
+      <button onclick="saveCustomMeal()">Save</button>
+      <button onclick="closeDialog()">Cancel</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("currentDate").textContent = new Date().toDateString();
+
+    const defaultMeals = [
+      { name: "Oats with Fruits", calories: 220, protein: 8, carbs: 40, fats: 4 },
+      { name: "Grilled Chicken", calories: 320, protein: 45, carbs: 0, fats: 10 },
+      { name: "Dal Rice", calories: 350, protein: 12, carbs: 55, fats: 5 },
+      { name: "Paneer Tikka", calories: 270, protein: 22, carbs: 8, fats: 15 },
+      { name: "Egg Omelette", calories: 180, protein: 14, carbs: 2, fats: 12 },
+      { name: "Vegetable Salad", calories: 150, protein: 4, carbs: 20, fats: 5 },
+      { name: "Fish Curry", calories: 400, protein: 30, carbs: 8, fats: 25 },
+      { name: "Chickpea Bowl", calories: 280, protein: 14, carbs: 35, fats: 6 },
+      { name: "Chicken Wrap", calories: 350, protein: 28, carbs: 30, fats: 12 },
+    ];
+
+    const mealCategories = ["breakfast", "lunch", "dinner", "snack"];
+    let customMeals = JSON.parse(localStorage.getItem("customMeals")) || [];
+    let totals = { calories: 0, protein: 0, carbs: 0, fats: 0 };
+    let currentCategory = "";
+
+    function loadMeals() {
+      const allMeals = [...defaultMeals, ...customMeals];
+      mealCategories.forEach(cat => {
+        const select = document.getElementById(`${cat}Select`);
+        select.innerHTML = allMeals.map(m => `<option value="${m.name}">${m.name}</option>`).join('') + `<option value="other">➕ Other</option>`;
+      });
+    }
+
+    function addMeal(category) {
+      const select = document.getElementById(`${category}Select`);
+      const selectedValue = select.value;
+
+      if (selectedValue === "other") {
+        currentCategory = category;
+        openDialog();
+        return;
+      }
+
+      const meal = [...defaultMeals, ...customMeals].find(m => m.name === selectedValue);
+      if (!meal) return;
+
+      const list = document.getElementById(`${category}List`);
+      const li = document.createElement("li");
+      li.innerHTML = `
+        ${meal.name} - ${meal.calories} kcal 
+        <button class="remove-btn" onclick="removeMeal(this, ${meal.calories}, ${meal.protein}, ${meal.carbs}, ${meal.fats})">✖</button>
+      `;
+      list.appendChild(li);
+
+      updateTotals(meal.calories, meal.protein, meal.carbs, meal.fats);
+      saveToLocalStorage();
+    }
+
+    function removeMeal(btn, c, p, carb, f) {
+      btn.parentElement.remove();
+      updateTotals(-c, -p, -carb, -f);
+      saveToLocalStorage();
+    }
+
+    function updateTotals(c, p, carb, f) {
+      totals.calories += c;
+      totals.protein += p;
+      totals.carbs += carb;
+      totals.fats += f;
+      document.getElementById("totalCalories").textContent = totals.calories;
+      document.getElementById("totalProtein").textContent = totals.protein;
+      document.getElementById("totalCarbs").textContent = totals.carbs;
+      document.getElementById("totalFats").textContent = totals.fats;
+    }
+
+    function openDialog() {
+      document.getElementById("customMealDialog").style.display = "flex";
+    }
+    function closeDialog() {
+      document.getElementById("customMealDialog").style.display = "none";
+    }
+
+    function saveCustomMeal() {
+      const name = document.getElementById("customMealName").value.trim();
+      const calories = parseFloat(document.getElementById("customCalories").value);
+      const protein = parseFloat(document.getElementById("customProtein").value) || 0;
+      const carbs = parseFloat(document.getElementById("customCarbs").value) || 0;
+      const fats = parseFloat(document.getElementById("customFats").value) || 0;
+
+      if (!name || isNaN(calories)) {
+        alert("Please enter a valid meal name and calories!");
+        return;
+      }
+
+      const newMeal = { name, calories, protein, carbs, fats };
+      customMeals.push(newMeal);
+      localStorage.setItem("customMeals", JSON.stringify(customMeals));
+      closeDialog();
+      loadMeals();
+
+      // Automatically add after saving
+      document.getElementById(`${currentCategory}Select`).value = name;
+      addMeal(currentCategory);
+
+      // Clear input
+      document.getElementById("customMealName").value = "";
+      document.getElementById("customCalories").value = "";
+      document.getElementById("customProtein").value = "";
+      document.getElementById("customCarbs").value = "";
+      document.getElementById("customFats").value = "";
+    }
+
+    function saveToLocalStorage() {
+      localStorage.setItem("totals", JSON.stringify(totals));
+    }
+
+    function loadTotals() {
+      const savedTotals = JSON.parse(localStorage.getItem("totals"));
+      if (savedTotals) {
+        totals = savedTotals;
+        updateTotals(0, 0, 0, 0);
+      }
+    }
+
+    loadMeals();
+    loadTotals();
+  </script>
+</body>
+</html>

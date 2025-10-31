@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meals & Nutrition - FitTrack</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    /* ===========================
+       FitTrack Meals Page Styling
+       =========================== */
+    body {
+      background: #0d0d0d;
+      color: #fff;
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .app-container .main-content {
+      flex: 1;
+      padding: 2rem;
+      background: #121212;
+      width: 100%;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    h2.section-title {
+      color: #ff6600;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px rgba(255, 102, 0, 0.4);
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    .meals-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      margin-top: 1.5rem;
+    }
+
+    .meal-section {
+      background: #1a1a1a;
+      border: 2px solid #ff4500;
+      border-radius: 15px;
+      padding: 1rem;
+      box-shadow: 0 0 10px rgba(255, 69, 0, 0.3);
+    }
+
+    .meals-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .meal-card {
+      background: #1b1b1b;
+      border: 2px solid #ff4500;
+      border-radius: 15px;
+      overflow: hidden;
+      transition: 0.3s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .meal-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(255, 102, 0, 0.6);
+    }
+
+    .meal-img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-bottom: 2px solid #ff4500;
+    }
+
+    .meal-content {
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .meal-title {
+      font-size: 1.1rem;
+      color: #fff;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .meal-info {
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      color: #ccc;
+    }
+
+    .macros {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
+    }
+
+    .macro-label {
+      color: #ff6600;
+    }
+
+    header.header {
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .header h2 {
+      color: #ff6600;
+      text-shadow: 0 0 10px rgba(255, 102, 0, 0.5);
+      font-size: 2rem;
+    }
+
+    .header p {
+      color: #aaa;
+    }
+
+    @media (max-width: 900px) {
+      .meals-container {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h1 class="app-logo">FitTrack</h1>
+        <button class="menu-toggle" id="menuToggle">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">Dashboard</a></li>
+        <li><a href="workouts.html" class="nav-link">Workouts</a></li>
+        <li><a href="recovery.html" class="nav-link">Track Muscle Recovery</a></li>
+        <li><a href="nutrition.html" class="nav-link">Nutrition</a></li>
+        <li><a href="meals.html" class="nav-link active">Meals</a></li>
+        <li><a href="progress.html" class="nav-link">Progress</a></li>
+        <li><a href="goal.html" class="nav-link">Goals</a></li>
+        <li><a href="recommendations.html" class="nav-link">AI Recommendations</a></li>
+        <li><a href="planner.html" class="nav-link">Smart Daily Planner</a></li>
+        <li><a href="meal-planner.html" class="nav-link ">Meal planner</a></li>
+        <li><a href="timer.html" class="nav-link">Timer / Stopwatch</a></li>
+        <li><a href="reminders.html" class="nav-link">Reminders</a></li>
+        <li><a href="settings.html" class="nav-link">Settings</a></li>
+      </ul>
+      <div class="sidebar-footer">
+        <button class="theme-toggle" id="themeToggle" title="Toggle dark mode"></button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <h2>🍴 Meals & Nutrition Info</h2>
+        <p id="currentDate"></p>
+      </header>
+
+      <div class="meals-container">
+        <!-- Veg Section -->
+        <section class="meal-section">
+          <h2 class="section-title">🥦 Veg Meals</h2>
+          <div id="vegMeals" class="meals-grid"></div>
+        </section>
+
+        <!-- Non-Veg Section -->
+        <section class="meal-section">
+          <h2 class="section-title">🍗 Non-Veg Meals</h2>
+          <div id="nonVegMeals" class="meals-grid"></div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById("currentDate").textContent = new Date().toDateString();
+
+    const vegMeals = [
+      { name: "Paneer Tikka", img: "https://2.bp.blogspot.com/-neI6rKuvsKI/VyN8GMrfhzI/AAAAAAAAHls/hugFFTKYgs8lrtUSXx0iEyG-KZwL4bPbwCLcB/s1600/tandoori-paneer-tikka4.jpg", calories: 270, protein: 22, carbs: 8, fats: 15, desc: "Grilled paneer cubes marinated with spices and yogurt." },
+      { name: "Vegetable Salad", img: "https://img.taste.com.au/QaDKlckA/taste/2016/11/fresh-summer-vegetable-salad-91664-1.jpeg", calories: 150, protein: 4, carbs: 20, fats: 5, desc: "Fresh veggies tossed with olive oil and lemon." },
+      { name: "Dal Rice", img: "https://tse3.mm.bing.net/th/id/OIP.KkHlpj0gaEv3nKa8h0GuAAHaE8?pid=Api&P=0&h=180", calories: 350, protein: 12, carbs: 55, fats: 5, desc: "Yellow dal served with steamed rice — comforting and nutritious." },
+      { name: "Palak Paneer", img: "https://tse2.mm.bing.net/th/id/OIP.MayO7BhZf0rwNiDOhvogdAHaHa?pid=Api&P=0&h=180", calories: 300, protein: 16, carbs: 12, fats: 18, desc: "Paneer cubes cooked in spinach gravy." },
+      { name: "Oats with Fruits", img: "https://tse4.mm.bing.net/th/id/OIP.EzcimrbQ4ed1DnlD_o8NfgHaE3?pid=Api&P=0&h=180", calories: 220, protein: 8, carbs: 40, fats: 4, desc: "Oats cooked in milk with fruits and nuts." },
+      { name: "Chickpea Bowl", img: "https://tse4.mm.bing.net/th/id/OIP.TQ3bsH-pcID2ftF1W6yhmwHaE8?pid=Api&P=0&h=180", calories: 280, protein: 14, carbs: 35, fats: 6, desc: "Boiled chickpeas with veggies and light dressing." },
+      { name: "Veg Pasta", img: "https://tse2.mm.bing.net/th/id/OIP.0nSUp6o7lJOigkCb7QVhkwHaE8?pid=Api&P=0&h=180", calories: 330, protein: 10, carbs: 60, fats: 7, desc: "Mixed vegetable pasta in tomato sauce." },
+      { name: "Grilled Veg Sandwich", img: "https://tse4.mm.bing.net/th/id/OIP.NlQIRN_WAezc-y5TVtPNBwHaFa?pid=Api&P=0&h=180", calories: 250, protein: 8, carbs: 35, fats: 6, desc: "Grilled vegetables between whole-grain bread." }
+    ];
+
+    const nonVegMeals = [
+      { name: "Grilled Chicken Breast", img: "https://up.yimg.com/ib/th/id/OIP.VAhMXQyfWo5Dn2NoLHJQewAAAA?pid=Api&rs=1&c=1&qlt=95&w=86&h=115", calories: 320, protein: 45, carbs: 0, fats: 10, desc: "Lean source of protein, great for muscle recovery." },
+      { name: "Egg Omelette", img: "https://tse4.mm.bing.net/th/id/OIP.ipZNzIejcwx9CuvSRlZ4SgHaE6?pid=Api&P=0&h=180", calories: 180, protein: 14, carbs: 2, fats: 12, desc: "Quick high-protein breakfast with veggies." },
+      { name: "Fish Curry", img: "https://tse4.mm.bing.net/th/id/OIP.rc_4F2f_IEJzRamLfz2lKAHaE8?pid=Api&P=0&h=180", calories: 400, protein: 30, carbs: 8, fats: 25, desc: "Rich in omega-3 fatty acids and flavorful sauce." },
+      { name: "Chicken Biryani", img: "https://tse4.mm.bing.net/th/id/OIP.p9-wzXR_aHzX09TC9Tji7gHaHa?pid=Api&P=0&h=180", calories: 520, protein: 35, carbs: 60, fats: 20, desc: "Spiced chicken and rice — flavorful one-pot meal." },
+      { name: "Boiled Eggs", img: "https://tse3.mm.bing.net/th/id/OIP.yk2Xj3A6gh7ueEU8N95e2AHaJQ?pid=Api&P=0&h=180", calories: 155, protein: 13, carbs: 1, fats: 11, desc: "Simple and nutritious snack." },
+      { name: "Tuna Sandwich", img: "https://tse1.mm.bing.net/th/id/OIP.B3QpgWjUxWcuhSVaSFR7UQHaHa?pid=Api&P=0&h=180", calories: 280, protein: 25, carbs: 20, fats: 9, desc: "Tuna fish with whole-grain bread." },
+      { name: "Grilled Fish Fillet", img: "https://tse4.mm.bing.net/th/id/OIP.tqAOGPJ2ecFwrq-3td1CRwHaE8?pid=Api&P=0&h=180", calories: 300, protein: 34, carbs: 0, fats: 12, desc: "Simple grilled fish fillet with seasoning." },
+      { name: "Chicken Wrap", img: "https://www.momables.com/wp-content/uploads/2024/03/Crispy-chicken-wrap_SQ.jpg", calories: 350, protein: 28, carbs: 30, fats: 12, desc: "Grilled chicken with veggies inside tortilla wrap." }
+    ];
+
+    function renderMeals(meals, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = meals.map(meal => `
+        <div class="meal-card">
+          <img src="${meal.img}" alt="${meal.name}" class="meal-img"
+               onerror="this.src='https://via.placeholder.com/300x200?text=No+Image';">
+          <div class="meal-content">
+            <p class="meal-title">${meal.name}</p>
+            <p class="meal-info">${meal.desc}</p>
+            <div class="macros"><span class="macro-label">Calories:</span> ${meal.calories}</div>
+            <div class="macros">
+              <span class="macro-label">Protein:</span> ${meal.protein} g
+              <span class="macro-label">Carbs:</span> ${meal.carbs} g
+              <span class="macro-label">Fats:</span> ${meal.fats} g
+            </div>
+          </div>
+        </div>`).join("");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      renderMeals(vegMeals, "vegMeals");
+      renderMeals(nonVegMeals, "nonVegMeals");
+    });
+  </script>
+</body>
+</html>

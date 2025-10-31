@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Recovery Tracker | FitTrack</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .recovery-container {
+      padding: 2rem;
+      color: #fff;
+      animation: fadeIn 0.6s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .recovery-form {
+      background: rgba(255, 87, 34, 0.08);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 0 25px rgba(255, 87, 34, 0.2);
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+
+    .recovery-form label {
+      font-weight: 500;
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .recovery-form input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 1rem;
+      border: none;
+      border-radius: 10px;
+      background: #1a1a1a;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    .recovery-form button {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(90deg, #ff5722, #ff9800);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .recovery-form button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #ff5722;
+    }
+
+    .alert-box {
+      display: none;
+      background: rgba(255, 87, 34, 0.9);
+      padding: 15px;
+      border-radius: 12px;
+      text-align: center;
+      color: #fff;
+      margin: 1rem auto;
+      width: 80%;
+      animation: glow 1.5s infinite alternate;
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 10px #ff5722; }
+      to { box-shadow: 0 0 25px #ff9800; }
+    }
+
+    #chart-container {
+      max-width: 800px;
+      margin: 2rem auto;
+      background: rgba(255, 87, 34, 0.08);
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 0 25px rgba(255, 87, 34, 0.2);
+    }
+
+    h2.section-title {
+      color: #ff5722;
+      text-align: center;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 10px #ff5722;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h1 class="app-logo">FitTrack</h1>
+        <button class="menu-toggle" id="menuToggle">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">Dashboard</a></li>
+        <li><a href="workouts.html" class="nav-link">Workouts</a></li>
+        <li><a href="recovery.html" class="nav-link active">Track Muscle Recovery</a></li>
+        <li><a href="nutrition.html" class="nav-link">Nutrition</a></li>
+        <li><a href="meals.html" class="nav-link">Meals</a></li>
+        <li><a href="progress.html" class="nav-link">Progress</a></li>
+        <li><a href="goal.html" class="nav-link">Goals</a></li>
+        <li><a href="recommendations.html" class="nav-link">AI Recommendations</a></li>
+        <li><a href="planner.html" class="nav-link">Smart Daily Planner</a></li>
+        <li><a href="meal-planner.html" class="nav-link">Meal Planner</a></li>
+        <li><a href="timer.html" class="nav-link">Timer / Stopwatch</a></li>
+        <li><a href="reminders.html" class="nav-link">Reminders</a></li>
+        <li><a href="settings.html" class="nav-link">Settings</a></li>
+      </ul>
+      <div class="sidebar-footer">
+                <button class="theme-toggle" id="themeToggle" title="Toggle dark mode">
+                    <!-- <span class="theme-icon">🌙</span> -->
+                </button>
+            </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="header">
+        <div class="header-content">
+          <h2>Smart Recovery Tracker 💤</h2>
+          <p id="currentDate"></p>
+        </div>
+      </header>
+
+      <div class="recovery-container">
+        <form id="recoveryForm" class="recovery-form">
+          <label for="sleep">Sleep Hours (0–12):</label>
+          <input type="number" id="sleep" min="0" max="12" required>
+
+          <label for="soreness">Muscle Soreness (1–10):</label>
+          <input type="number" id="soreness" min="1" max="10" required>
+
+          <label for="recovery">Recovery Rating (1–10):</label>
+          <input type="number" id="recovery" min="1" max="10" required>
+
+          <button type="submit">Save Entry</button>
+        </form>
+
+        <div id="alertBox" class="alert-box">Recommended Rest Today 💤</div>
+
+        <div id="chart-container">
+          <h2 class="section-title">Recovery Over Time</h2>
+          <canvas id="recoveryChart"></canvas>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    const form = document.getElementById('recoveryForm');
+    const chartCanvas = document.getElementById('recoveryChart');
+    const alertBox = document.getElementById('alertBox');
+    let chart;
+
+    function loadRecoveryData() {
+      return JSON.parse(localStorage.getItem('recoveryData')) || [];
+    }
+
+    function saveRecoveryData(data) {
+      localStorage.setItem('recoveryData', JSON.stringify(data));
+    }
+
+    function updateChart() {
+      const data = loadRecoveryData();
+      const labels = data.map(d => d.date);
+      const recoveryValues = data.map(d => d.recovery);
+      const sorenessValues = data.map(d => d.soreness);
+
+      if (chart) chart.destroy();
+
+      chart = new Chart(chartCanvas, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Recovery Rating',
+              data: recoveryValues,
+              borderColor: '#ff9800',
+              fill: false,
+              tension: 0.4
+            },
+            {
+              label: 'Soreness Level',
+              data: sorenessValues,
+              borderColor: '#ff5722',
+              fill: false,
+              tension: 0.4
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          scales: { y: { beginAtZero: true, max: 10 } },
+          plugins: { legend: { labels: { color: '#fff' } } }
+        }
+      });
+    }
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const sleep = parseFloat(document.getElementById('sleep').value);
+      const soreness = parseFloat(document.getElementById('soreness').value);
+      const recovery = parseFloat(document.getElementById('recovery').value);
+
+      const entry = {
+        date: new Date().toLocaleDateString('en-IN'),
+        sleep, soreness, recovery
+      };
+
+      const data = loadRecoveryData();
+      data.push(entry);
+      saveRecoveryData(data);
+
+      if (soreness >= 8) {
+        alertBox.style.display = 'block';
+        alertBox.innerText = "High soreness detected 😣 — Take a Rest Day!";
+      } else {
+        alertBox.style.display = 'none';
+      }
+
+      form.reset();
+      updateChart();
+    });
+
+    document.getElementById("currentDate").textContent =
+      new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
+    updateChart();
+  </script>
+</body>
+</html>
